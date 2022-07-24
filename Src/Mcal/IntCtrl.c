@@ -13,8 +13,6 @@
 #include "IntCtrl_Regs.h"
 //#include "tm4c123gh6pm_registers.h"
 
-static const IntCtrl_ConfigChannel * IntCtrl_PortChannels = NULL_PTR;
-static uint8 IntCtrl_Status = INTCTRL_NOT_INITIALIZED;
 
 /************************************************************************************
 * Service Name: IntCtrl_Init
@@ -29,10 +27,12 @@ static uint8 IntCtrl_Status = INTCTRL_NOT_INITIALIZED;
 ************************************************************************************/
 void IntCtrl_Init(const IntCtrl_ConfigType * ConfigPtr)
 {
-		/*
-		 * Set the module state to initialized and point to the PB configuration structure using a global pointer.
-		 * This global pointer is global to be used by other functions to read the PB configuration structures
-		 */
-		IntCtrl_Status       = INTCTRL_INITIALIZED;
-		IntCtrl_PortChannels = ConfigPtr->Channels; /* address of the first Channels structure --> Channels[0] */
+		/*Configure Grouping\SubGrouping System in APINT register in SCB*/
+		SCB_APINT_REG_OFFSET = VECTKEY | ((ConfigPtr -> priority_group) << 8));
+	
+		/*Assign Group\SubGroup priorty in NVIC_PRIx Nvic and SCB_SYSPRIx Registers*/
+		wq
+		
+		/*Enable\Disable based on user configuration in NVIC_ENx and SCB_Sys Registers*/
+		wq
 }

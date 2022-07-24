@@ -12,11 +12,6 @@
 #ifndef INTCTRL_H
 #define INTCTRL_H
 
-/*
- * Macros for IntCtrl Status
- */
-#define INTCTRL_INITIALIZED                (1U)
-#define INTCTRL_NOT_INITIALIZED            (0U)
 
 #include "Std_Types.h"
 
@@ -29,42 +24,50 @@
  *                              Module Data Types                              *
  *******************************************************************************/
  
+ /* Data Structure required for initializing the IntCtrl Priorty Group */
  typedef enum
 {
-  /* Mask which defines the positions of the channel group */
-  uint8 mask;
-  /* Position of the group from LSB */
-  uint8 offset;
-  /* This shall be the port ID which the Channel group is defined. */
-  Dio_PortType PortIndex;
+	Group = 4, 
+	Group_Group_SubGroup = 5,
+	Group_SubGroup_SubGroup = 6,
+	SubGroup = 7
+}IntCtrl_PriortyGroup;
+ 
+ typedef enum
+{
+	GPIO_Port_A,
+	GPIO_Port_B,
+	GPIO_Port_C,
+	GPIO_Port_D,
+	GPIO_Port_E,
+	UART0,
+	UART1,
+	SSI0,
+	I2C0,
+	PWM0_Fault,
+	PWM0_Generator_0,
+	PWM0_Generator_1,
+	PWM0_Generator_2,
+	QEI0,
+	ADC0_Sequence_0,
+	ADC0_Sequence_1,
+	ADC0_Sequence_2,
+	ADC0_Sequence_3,
+	Watchdog_Timers_0_and_1,
+	Bit_16_32_Timer_0A,
+	Bit_16_32_Timer_0B,
+	Bit_16_32_Timer_1A,
+	Bit_16_32_Timer_1B,
+	Bit_16_32_Timer_2A,
+	Bit_16_32_Timer_2B	
 } IntCtrl_InterruptType;
 
-/* Type definition for Dio_PortLevelType used by the DIO APIs */
-typedef uint8 Dio_PortLevelType;
 
-/* Structure for Dio_ChannelGroup */
+/* Data Structure required for initializing the IntCtrl Driver */
 typedef struct
 {
-  /* Mask which defines the positions of the channel group */
-  uint8 mask;
-  /* Position of the group from LSB */
-  uint8 offset;
-  /* This shall be the port ID which the Channel group is defined. */
-  Dio_PortType PortIndex;
-} Dio_ChannelGroupType;
-
-typedef struct
-{
-	/* Member contains the ID of the Port that this channel belongs to */
-	Dio_PortType Port_Num;
-	/* Member contains the ID of the Channel*/
-	Dio_ChannelType Ch_Num;
-}Dio_ConfigChannel;
-
-/* Data Structure required for initializing the Dio Driver */
-typedef struct IntCtrl_ConfigType
-{
-	IntCtrl_ConfigChannel Channels[DIO_CONFIGURED_CHANNLES];
+	IntCtrl_PriortyGroup priority_group;
+	IntCtrl_InterruptType interrupt_type;
 } IntCtrl_ConfigType;
 
 /*******************************************************************************
