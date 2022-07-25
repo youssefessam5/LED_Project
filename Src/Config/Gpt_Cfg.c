@@ -12,8 +12,6 @@
 #ifndef GPT_CFG_H
 #define GPT_CFG_H
 
-/* Channel Index in the array of structures in Gpt_PBcfg.c */
-#define DioConf_LED1_CHANNEL_ID_INDEX        (uint8)0x00
 
 
 #endif /* GPT_CFG_H */
