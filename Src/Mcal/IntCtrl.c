@@ -12,21 +12,7 @@
 #include "IntCtrl.h"
 #include "IntCtrl_Regs.h"
 
-
-/* Enable Exceptions ... This Macro enable IRQ interrupts, Programmble Systems Exceptions and Faults by clearing the I-bit in the PRIMASK. */
-#define Enable_Exceptions()    __asm("CPSIE I")
-
-/* Disable Exceptions ... This Macro disable IRQ interrupts, Programmble Systems Exceptions and Faults by clearing the I-bit in the PRIMASK. */
-#define Disable_Exceptions()   __asm("CPSID I")
-
-/* Enable Faults ... This Macro enable Faults by clearing the F-bit in the FAULTMASK */
-#define Enable_Faults()        __asm("CPSIE F")
-
-/* Disable Faults ... This Macro disable Faults by setting the F-bit in the FAULTMASK */
-#define Disable_Faults()       __asm("CPSID F") 
-
-/* Go to low power mode while waiting for the next interrupt */
-#define Wait_For_Interrupt()   __asm("WFI")
+//static const IntCtrl_ConfigChannel * IntCtrl_PortChannels = NULL_PTR;
 
 /************************************************************************************
 * Service Name: IntCtrl_Init
@@ -43,12 +29,31 @@ void IntCtrl_Init(const IntCtrl_ConfigType * ConfigPtr)
 {
 		Enable_Exceptions();
 		Enable_Faults();
+	
+		volatile uint8 i;
+		volatile uint32 RegOffset, Offset;
+	
+		for(i = 0 ;i < INTCTRL_CONFIGURED_CHANNLES ; i++)
+		{
+			RegOffset = ((ConfigPtr->interrupt_type)/ WORD_LENGTH_BIT) * WORD_LENGTH_BYTE;
+			Offset = (ConfigPtr->interrupt_type) % WORD_LENGTH_BIT;
+    
+      switch(RegOffset / WORD_LENGTH_BYTE)
+				{
+                case  0: SET_BIT(NVIC_EN0_REG,Offset); /* NVIC Enable 0 - 31  */
+                        break;
+                case  1: SET_BIT(NVIC_EN1_REG,Offset); /* NVIC Enable 32 - 63  */
+                        break;
+                case  2: SET_BIT(NVIC_EN2_REG,Offset); /* NVIC Enable 64 - 95  */
+                        break;
+                case  3: SET_BIT(NVIC_EN3_REG,Offset); /* NVIC Enable 96 - 127 */
+                        break;
+        }
+		}
 		/*Configure Grouping\SubGrouping System in APINT register in SCB*/
-		SCB_APINT_REG_OFFSET = VECTKEY | ((ConfigPtr -> priority_group) << 8));
+		SCB_APINT_REG_OFFSET = VECTKEY | ((ConfigPtr -> priority_group) << 8);
 	
 		/*Assign Group\SubGroup priorty in NVIC_PRIx Nvic and SCB_SYSPRIx Registers*/
-		wq
+		//wq
 		
-		/*Enable\Disable based on user configuration in NVIC_ENx and SCB_Sys Registers*/
-		wq
 }

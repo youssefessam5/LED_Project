@@ -30,15 +30,14 @@ static void (*g_Gpt_Call_Back_Ptr)(void) = NULL_PTR;
 ************************************************************************************/
 void Gpt_Init(const Gpt_ConfigType * ConfigPtr)
 {
-    //Gpt_GptChannels = ConfigPtr->Channels;
 		volatile uint32 * GPT_Ptr = NULL_PTR;
 		volatile uint32 delay = 0;
-		 ////////////////////////////////// next block to point on the base address of current configured timer ////////////////////////////////////
-		/* Enable clock for PORT and allow time for clock to start*/
+
+		/* Enable clock for GPT and allow time for clock to start*/
     SYSCTL_RCGCTIMER_REG |= (1 << (ConfigPtr->Gpt_ChannelNum));
     delay = SYSCTL_RCGCTIMER_REG;
 	
-    uint8 temp = (ConfigPtr -> Gpt_ChannelNum) / 2; // convert timers number from 0->24 to 0->12 to point on the base address 12 registers
+    uint8 temp = (ConfigPtr -> Gpt_ChannelNum) / 2;
     if(temp >= 0 && temp<= 7)
     {
       GPT_Ptr = (volatile uint32 *)GPT_TIMER0_BASE_ADDRESS +(1000 * temp);
@@ -47,7 +46,7 @@ void Gpt_Init(const Gpt_ConfigType * ConfigPtr)
     {
       GPT_Ptr = (volatile uint32 *)GPT_WIDE_TIMER2_BASE_ADDRESS +(1000 * (temp-8));
     }
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
     if( (ConfigPtr -> Gpt_ChannelNum)%2 == 0) /* we are in Timer A */
     {
         CLEAR_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMCTL_REG_OFFSET),0);/* Clear the TAEN to disable the timer in the begining of configs */
@@ -115,14 +114,12 @@ void Gpt_StartTimer(Gpt_ChannelType Channel, Gpt_ValueType Value)
 		if( Channel %2 ==0) /* Timer A */
 		{
 			*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTAILR_REG_OFFSET) = (uint16)Value;		
-			//SET_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTAMR_REG_OFFSET),5);
 			SET_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMCTL_REG_OFFSET),0);
 			SET_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMIMR_REG_OFFSET),0);		
 		}
 		else /*Timer B*/
 		{
 			*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTBILR_REG_OFFSET) = (uint16)Value;
-			//SET_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMTBMR_REG_OFFSET),5);
 			SET_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMCTL_REG_OFFSET),8);
 			SET_BIT(*(volatile uint32 *)((volatile uint8 *)GPT_Ptr + GPT_GPTMIMR_REG_OFFSET),8);	
 		}

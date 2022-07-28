@@ -21,6 +21,28 @@
 #include "Common_Macros.h"
 
 /*******************************************************************************
+ *                              Definations                                    *
+ *******************************************************************************/
+ /* Enable Exceptions ... This Macro enable IRQ interrupts, Programmble Systems Exceptions and Faults by clearing the I-bit in the PRIMASK. */
+#define Enable_Exceptions()    __asm("CPSIE I")
+
+/* Disable Exceptions ... This Macro disable IRQ interrupts, Programmble Systems Exceptions and Faults by clearing the I-bit in the PRIMASK. */
+#define Disable_Exceptions()   __asm("CPSID I")
+
+/* Enable Faults ... This Macro enable Faults by clearing the F-bit in the FAULTMASK */
+#define Enable_Faults()        __asm("CPSIE F")
+
+/* Disable Faults ... This Macro disable Faults by setting the F-bit in the FAULTMASK */
+#define Disable_Faults()       __asm("CPSID F") 
+
+/* Go to low power mode while waiting for the next interrupt */
+#define Wait_For_Interrupt()   __asm("WFI")
+
+#define WORD_LENGTH_BIT       32
+
+#define WORD_LENGTH_BYTE      4
+
+/*******************************************************************************
  *                              Module Data Types                              *
  *******************************************************************************/
  
