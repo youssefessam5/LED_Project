@@ -16,31 +16,50 @@
 
 /*******************************************************************************
  *                              Module Definitions                             *
- *******************************************************************************/
-/* Clock Register For All Ports */
-#define SYSCTL_REGCGC2_REG       (*((volatile uint32 *)0x400FE108))
+ *******************************************************************************/  
+/* GPT Registers base addresses */
+#define GPT_TIMER0_BASE_ADDRESS           0x40030000
+#define GPT_TIMER1_BASE_ADDRESS           0x40031000
+#define GPT_TIMER2_BASE_ADDRESS           0x40032000
+#define GPT_TIMER3_BASE_ADDRESS           0x40033000
+#define GPT_TIMER4_BASE_ADDRESS           0x40034000
+#define GPT_TIMER5_BASE_ADDRESS           0x40035000
+#define GPT_WIDE_TIMER0_BASE_ADDRESS      0x40036000
+#define GPT_WIDE_TIMER1_BASE_ADDRESS      0x40037000
+#define GPT_WIDE_TIMER2_BASE_ADDRESS      0x4004C000
+#define GPT_WIDE_TIMER3_BASE_ADDRESS      0x4004D000
+#define GPT_WIDE_TIMER4_BASE_ADDRESS      0x4004E000
+#define GPT_WIDE_TIMER5_BASE_ADDRESS      0x4004F000
 
-/* Magic Number Of Lock Register */
-#define MAGIC_NUMBER                (uint32)0x4C4F434B;   
+/* Timers Registers offset addresses */
+#define GPT_GPTMCFG_REG_OFFSET              0x000
+#define GPT_GPTMTAMR_REG_OFFSET             0x004
+#define GPT_GPTMTBMR_REG_OFFSET             0x008
+#define GPT_GPTMCTL_REG_OFFSET              0x00C
+#define GPT_GPTMSYNC_REG_OFFSET             0x010
+#define GPT_GPTMIMR_REG_OFFSET              0x018
+#define GPT_GPTMRIS_REG_OFFSET              0x01C
+#define GPT_GPTMMIS_REG_OFFSET              0x020
+#define GPT_GPTMICR_REG_OFFSET              0x024
+#define GPT_GPTMTAILR_REG_OFFSET            0x028
+#define GPT_GPTMTBILR_REG_OFFSET            0x02C
+#define GPT_GPTMTAMATCHR_REG_OFFSET         0x030
+#define GPT_GPTMTBMATCHR_REG_OFFSET         0x034
+#define GPT_GPTMTAPR_REG_OFFSET             0x038
+#define GPT_GPTMTBPR_REG_OFFSET             0x03C
+#define GPT_GPTMTAPMR_REG_OFFSET            0x040
+#define GPT_GPTMTBPMR_REG_OFFSET            0x044
+#define GPT_GPTMTAR_REG_OFFSET              0x048
+#define GPT_GPTMTBR_REG_OFFSET              0x04C
+#define GPT_GPTMTAV_REG_OFFSET              0x050
+#define GPT_GPTMTBV_REG_OFFSET              0x054
+#define GPT_GPTMRTCPD_REG_OFFSET            0x058
+#define GPT_GPTMTAPS_REG_OFFSET             0x05C
+#define GPT_GPTMTBPS_REG_OFFSET             0x060
+#define GPT_GPTMTAPV_REG_OFFSET             0x064
+#define GPT_GPTMTBPV_REG_OFFSET             0x068
 
-/* GPIO Registers base addresses */
-#define GPIO_PORTA_BASE_ADDRESS           0x40004000
-#define GPIO_PORTB_BASE_ADDRESS           0x40005000
-#define GPIO_PORTC_BASE_ADDRESS           0x40006000
-#define GPIO_PORTD_BASE_ADDRESS           0x40007000
-#define GPIO_PORTE_BASE_ADDRESS           0x40024000
-#define GPIO_PORTF_BASE_ADDRESS           0x40025000
-
-/* GPIO Registers offset addresses */
-#define PORT_DATA_REG_OFFSET              0x3FC
-#define PORT_DIR_REG_OFFSET               0x400
-#define PORT_ALT_FUNC_REG_OFFSET          0x420
-#define PORT_PULL_UP_REG_OFFSET           0x510
-#define PORT_PULL_DOWN_REG_OFFSET         0x514
-#define PORT_DIGITAL_ENABLE_REG_OFFSET    0x51C
-#define PORT_LOCK_REG_OFFSET              0x520
-#define PORT_COMMIT_REG_OFFSET            0x524
-#define PORT_ANALOG_MODE_SEL_REG_OFFSET   0x528
-#define PORT_CTL_REG_OFFSET               0x52C
+/* GPT Timer Registers */
+#define SYSCTL_RCGCTIMER_REG      (*((volatile uint32 *)0x400FE604))
 
 #endif /* GPT_REGS_H */
