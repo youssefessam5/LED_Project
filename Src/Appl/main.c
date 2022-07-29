@@ -31,11 +31,11 @@ void Init_Task(void)
     /* Initialize Port Driver */
     Port_Init(&Port_Configuration);
 	
-		/* Initialize IntCtrl Driver */
-		IntCtrl_Init(&IntCtrl_Configuration);
+    /* Initialize IntCtrl Driver */
+    IntCtrl_Init(&IntCtrl_Configuration);
 
-		/* Initialize Port Driver */
-		Gpt_Init(&Gpt_Configuration);
+    /* Initialize Port Driver */
+    Gpt_Init(&Gpt_Configuration);
 }
 
 int main(void)
@@ -47,7 +47,7 @@ int main(void)
 	Gpt_StartTimer(TIMER0A, 65200);
 	
 	/* passing function to control led to call back function */
-  Gpt_SetCallBack(LED_toggle);
+ 	Gpt_SetCallBack(LED_toggle);
 	
 	while(1)
 	{	
