@@ -11,7 +11,7 @@
 
 #include "IntCtrl.h"
 
-/* PB structure used with Dio_Init API */
+/* PB structure used with IntCtrl_Init API */
 const IntCtrl_ConfigType IntCtrl_Configuration = {
                                              Bit_16_32_Timer_0A, SubGroup
 				         };

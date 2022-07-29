@@ -38,9 +38,13 @@
 /* Go to low power mode while waiting for the next interrupt */
 #define Wait_For_Interrupt()   __asm("WFI")
 
-#define WORD_LENGTH_BIT       32
+#define WORD_LENGTH_BIT              32
 
-#define WORD_LENGTH_BYTE      4
+#define WORD_LENGTH_BYTE             4
+
+#define INTCTRL_NUM_OF_PRI_FIELDS    4 
+
+#define INTCTRL_PRI_RESERVED         5
 
 /*******************************************************************************
  *                              Module Data Types                              *
@@ -143,20 +147,26 @@ typedef struct
 {
 	IntCtrl_InterruptType interrupt_type;
 	IntCtrl_PriortyGroup priority_group;
+} IntCtrl_ConfigChannel;
+
+/* Data Structure required for initializing the IntCtrl Driver */
+typedef struct
+{
+	IntCtrl_ConfigChannel Channels[INTCTRL_CONFIGURED_CHANNLES];
 } IntCtrl_ConfigType;
 
 /*******************************************************************************
  *                      Function Prototypes                                    *
  *******************************************************************************/
 
-/* Function for DIO Initialization API */
+/* Function for IntCtrl Initialization API */
 void IntCtrl_Init(const IntCtrl_ConfigType * ConfigPtr);
 
 /*******************************************************************************
  *                       External Variables                                    *
  *******************************************************************************/
 
-/* Extern PB structures to be used by Dio and other modules */
+/* Extern PB structures to be used by IntCtrl and other modules */
 extern const IntCtrl_ConfigType IntCtrl_Configuration;
 
 #endif /* INTCTRL_H */

@@ -23,7 +23,7 @@
 /*******************************************************************************
  *                              Module Data Types                              *
  *******************************************************************************/
-/* Type definition for GPT_ChannelType used by the GPT APIs */
+/* Type definition for GPT_PreScaler used by the GPT APIs */
 typedef uint8 Gpt_PreScaler;
 
 /* Type definition for GPT_ChannelType used by the GPT APIs */
@@ -45,6 +45,12 @@ typedef struct Gpt_ConfigChannel
   Gpt_RunningMode Gpt_ChannelRunningMode;
 	/* The channel prescaler */
 	Gpt_PreScaler   Gpt_prescaler;
+} Gpt_ConfigChannel;
+
+/* Data Structure required for initializing the Gpt Driver */
+typedef struct
+{
+	Gpt_ConfigChannel Channels[GPT_CONFIGURED_CHANNLES];
 } Gpt_ConfigType;
 
 /*******************************************************************************
@@ -64,7 +70,7 @@ void Gpt_SetCallBack(void (*Ptr2Func)(void));
  *                       External Variables                                    *
  *******************************************************************************/
 
-/* Extern PB structures to be used by Dio and other modules */
+/* Extern PB structures to be used by Gpt and other modules */
 extern const Gpt_ConfigType Gpt_Configuration;
 
 #endif /* GPT_H */

@@ -12,14 +12,14 @@
 #include "IntCtrl.h"
 #include "IntCtrl_Regs.h"
 
-//static const IntCtrl_ConfigChannel * IntCtrl_PortChannels = NULL_PTR;
-
+static const IntCtrl_ConfigChannel * IntCtrl_PortChannels = NULL_PTR;
+static  volatile unsigned long  * Pri_Reg		=		NULL_PTR;
 /************************************************************************************
 * Service Name: IntCtrl_Init
 * Service ID[hex]: 0x10
 * Sync/Async: Synchronous
 * Reentrancy: Non reentrant
-* Parameters (in): ConfigPtr
+* Parameters (in): ConfigPtr - Pointer to post-build configuration data
 * Parameters (inout): None
 * Parameters (out): None
 * Return value: None
@@ -31,14 +31,15 @@ void IntCtrl_Init(const IntCtrl_ConfigType * ConfigPtr)
 		Enable_Faults();
 	
 		volatile uint8 i;
-		volatile uint32 RegOffset, Offset;
+		volatile uint32 Reg_Offset, Offset, Groups;
+		IntCtrl_PortChannels = ConfigPtr->Channels; /* address of the first Channels structure --> Channels[0] */
 	
 		for(i = 0 ;i < INTCTRL_CONFIGURED_CHANNLES ; i++)
 		{
-			RegOffset = ((ConfigPtr->interrupt_type)/ WORD_LENGTH_BIT) * WORD_LENGTH_BYTE;
-			Offset = (ConfigPtr->interrupt_type) % WORD_LENGTH_BIT;
+			Reg_Offset = ((IntCtrl_PortChannels[i].interrupt_type)/ WORD_LENGTH_BIT) * WORD_LENGTH_BYTE;
+			Offset = (IntCtrl_PortChannels[i].interrupt_type) % WORD_LENGTH_BIT;
     
-      switch(RegOffset / WORD_LENGTH_BYTE)
+      switch(Reg_Offset / WORD_LENGTH_BYTE)
 				{
                 case  0: SET_BIT(NVIC_EN0_REG,Offset); /* NVIC Enable 0 - 31  */
                         break;
@@ -49,11 +50,24 @@ void IntCtrl_Init(const IntCtrl_ConfigType * ConfigPtr)
                 case  3: SET_BIT(NVIC_EN3_REG,Offset); /* NVIC Enable 96 - 127 */
                         break;
         }
+				switch(IntCtrl_PortChannels[i].priority_group)
+				{
+                case  Group: Groups = ((Group << 0) & 0x7) | (SubGroup & 0x0);
+                        break;
+                case  Group_Group_SubGroup: Groups = ((Group << 1) & 0x6) | (SubGroup & 0x1);
+                        break;
+                case  Group_SubGroup_SubGroup: Groups = ((Group << 2) & 0x4) | (SubGroup & 0x3);
+                        break;
+                case  SubGroup: Groups = ((Group << 3) & 0x0)|(SubGroup & 0x7);
+                        break;
+        }
+			/*Configure Grouping\SubGrouping System in APINT register in SCB*/
+			SCB_APINT_REG_OFFSET = VECTKEY | ((IntCtrl_PortChannels[i].priority_group) << 8);
+			
+			Reg_Offset = ((IntCtrl_PortChannels[i].interrupt_type) / INTCTRL_NUM_OF_PRI_FIELDS);
+			Offset = INTCTRL_PRI_RESERVED + (((IntCtrl_PortChannels[i].interrupt_type)% INTCTRL_NUM_OF_PRI_FIELDS)*8);
+			Pri_Reg =& (NVIC_PRI0_REG);
+			Pri_Reg += Reg_Offset;
+			*(Pri_Reg)|= (Groups << Offset);	
 		}
-		/*Configure Grouping\SubGrouping System in APINT register in SCB*/
-		SCB_APINT_REG_OFFSET = VECTKEY | ((ConfigPtr -> priority_group) << 8);
-	
-		/*Assign Group\SubGroup priorty in NVIC_PRIx Nvic and SCB_SYSPRIx Registers*/
-		//wq
-		
 }

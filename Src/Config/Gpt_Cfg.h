@@ -12,6 +12,9 @@
 #ifndef GPT_CFG_H
 #define GPT_CFG_H
 
+/* Number of the configured Gpt Channels */
+#define GPT_CONFIGURED_CHANNLES              (1U)
+
 /* Timer Channel Types */
 #define TIMER0A   0
 #define TIMER0B   1
